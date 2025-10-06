@@ -4,7 +4,7 @@ import subprocess
 # --- Definición de la Secuencia de Comandos ---
 # Lista de scripts a ejecutar en el orden correcto
 pipeline_steps = [
-    "data/make_dataset.py",
+    "notebooks/make_dataset.py",
     "models/train_model.py",
     "models/evaluate_model.py"
 ]
