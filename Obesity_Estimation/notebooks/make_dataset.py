@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
 # Cargar datos crudos
-df = pd.read_csv('data/raw/obesity_estimation_original.csv')
+df = pd.read_csv('data/raw/obesity_estimation_final.csv')
 
 # --- LIMPIEZA Y TRANSFORMACIÓN ---
 # (Este dataset está bastante limpio, pero aquí irían los pasos)
@@ -30,4 +30,4 @@ y_train.to_csv('data/processed/y_train.csv', index=False)
 X_test.to_csv('data/processed/X_test.csv', index=False)
 y_test.to_csv('data/processed/y_test.csv', index=False)
 
-print("Datos procesados y guardados en data/02_processed/")
+print("Datos procesados y guardados en data/processed/")
