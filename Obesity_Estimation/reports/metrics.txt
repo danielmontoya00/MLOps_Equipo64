@@ -1,6 +1,6 @@
 Accuracy: 0.9479
 
---- Reporte de Clasificación ---
+--- Reporte de ClasificaciÃ³n ---
               precision    recall  f1-score   support
 
            0       0.94      0.92      0.93        37
