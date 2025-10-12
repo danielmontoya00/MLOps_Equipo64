@@ -1,16 +1,16 @@
-Accuracy: 0.9479
+Random Forest - Test Accuracy: 0.9446
 
 --- Reporte de Clasificación ---
               precision    recall  f1-score   support
 
-           0       0.93      0.97      0.95        38
-           1       0.89      0.91      0.90        43
+           0       0.92      0.95      0.94        38
+           1       0.87      0.91      0.89        43
            2       0.93      0.98      0.95        53
            3       0.98      1.00      0.99        43
            4       1.00      1.00      1.00        48
            5       0.97      0.85      0.91        41
            6       0.95      0.90      0.93        41
 
-    accuracy                           0.95       307
-   macro avg       0.95      0.95      0.95       307
-weighted avg       0.95      0.95      0.95       307
+    accuracy                           0.94       307
+   macro avg       0.95      0.94      0.94       307
+weighted avg       0.95      0.94      0.94       307

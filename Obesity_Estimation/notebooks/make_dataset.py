@@ -22,11 +22,21 @@ X = df.drop('NObeyesdad', axis=1)
 y = df['NObeyesdad']
 
 # Dividir en entrenamiento y prueba
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_temp, X_test, y_temp, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+# Dividir entrenamiento+validación en entrenamiento y validación ---
+X_train, X_val, y_train, y_val = train_test_split(
+    X_temp, y_temp, test_size=0.25, random_state=42, stratify=y_temp
+)
+# Resultado: 60% train, 20% val, 20% test
 
 # Guardar los datos procesados
 X_train.to_csv('data/processed/X_train.csv', index=False)
 y_train.to_csv('data/processed/y_train.csv', index=False)
+X_val.to_csv('data/processed/X_val.csv', index=False)
+y_val.to_csv('data/processed/y_val.csv', index=False)
 X_test.to_csv('data/processed/X_test.csv', index=False)
 y_test.to_csv('data/processed/y_test.csv', index=False)
 
