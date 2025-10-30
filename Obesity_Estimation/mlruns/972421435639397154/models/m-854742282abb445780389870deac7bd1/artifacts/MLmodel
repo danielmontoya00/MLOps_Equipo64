@@ -1,0 +1,22 @@
+artifact_path: file:///C:/Users/Usuario1/Documents/GitHub/MLOps_Equipo64/Obesity_Estimation/mlruns/972421435639397154/models/m-854742282abb445780389870deac7bd1/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.9
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.2
+mlflow_version: 3.3.2
+model_id: m-854742282abb445780389870deac7bd1
+model_size_bytes: 2258643
+model_uuid: m-854742282abb445780389870deac7bd1
+prompts: null
+run_id: 6d637be8c6bd4e4fa271d8980246fe4a
+utc_time_created: '2025-10-29 14:18:09.471086'
