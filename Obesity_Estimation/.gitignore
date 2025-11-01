@@ -192,3 +192,45 @@ cython_debug/
 # Ignorar datos cacheados por DVC
 !data/raw/
 !data/raw/*.dvc
+
+#Adicionado para evitar errores por cambio de versiones de SO
+# ==========================================
+# 🔧 Reglas adicionales para proyecto Obesity_Estimation (MLOps)
+# ==========================================
+
+# === DATOS ===
+data/raw/*.csv
+data/interim/
+data/processed/
+!data/raw/*.dvc  # se mantienen los archivos de control DVC
+!data/raw/README.md
+
+# === MODELOS ===
+models/*.pkl
+models/*.joblib
+models/*.onnx
+
+# === LOGS Y TRACKING ===
+logs/
+mlruns/
+mlartifacts/
+*.log
+
+# === ARCHIVOS DVC ===
+.dvc/
+.dvcignore
+*.dvc
+
+# === NOTEBOOKS ===
+notebooks/.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# === ARCHIVOS TEMPORALES / SISTEMA ===
+__MACOSX/
+*.bak
+*.tmp
+
+# === EVITAR RUTAS INVÁLIDAS WINDOWS ===
+**/..\*
+"notebooks/..\\data\\raw\\obesity_estimation_final.csv"
+"notebooks/..\\data\\raw\\obesity_estimation_original.csv"
