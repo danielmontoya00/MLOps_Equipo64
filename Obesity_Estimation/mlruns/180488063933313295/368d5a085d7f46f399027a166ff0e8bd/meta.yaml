@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/mlruns/180488063933313295/368d5a085d7f46f399027a166ff0e8bd/artifacts
+end_time: 1761969628130
+entry_point_name: ''
+experiment_id: '180488063933313295'
+lifecycle_stage: active
+run_id: 368d5a085d7f46f399027a166ff0e8bd
+run_name: mysterious-quail-460
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1761969626692
+status: 3
+tags: []
+user_id: maryg

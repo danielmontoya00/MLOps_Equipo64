@@ -3,8 +3,6 @@ import pickle
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
-
 from sklearn.metrics import classification_report, accuracy_score, ConfusionMatrixDisplay
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
@@ -14,15 +12,26 @@ from sklearn.decomposition import PCA
 
 print("Ejecutando script de evaluación...")
 
+# --- Rutas ---
+# --- Definir rutas dinámicas ---
+CURRENT_DIR = os.path.dirname(__file__)  # /models/
+BASE_DIR = os.path.dirname(CURRENT_DIR)  # /Obesity_Estimation/
+
+DATA_PATH = os.path.join(BASE_DIR, 'data', 'processed')
+MODEL_PATH = os.path.join(BASE_DIR, 'models', 'obesity_classifier_v1.pkl')
+REPORTS_PATH = os.path.join(BASE_DIR, 'reports')
+os.makedirs(REPORTS_PATH, exist_ok=True)
+
 # --- 1. Cargar Modelo y Datos de Prueba ---
-model_filepath = 'models/obesity_classifier_v1.pkl'
-with open(model_filepath, 'rb') as f:
+with open(MODEL_PATH, 'rb') as f:
     model = pickle.load(f)
 
-X_test = pd.read_csv('data/processed/X_test.csv')
-y_test = pd.read_csv('data/processed/y_test.csv').values.ravel()
+X_test = pd.read_csv(os.path.join(DATA_PATH, 'X_test.csv'))
+y_test = pd.read_csv(os.path.join(DATA_PATH, 'y_test.csv')).values.ravel()
 
 # --- 2. Realizar Predicciones ---
+
+print("Evaluando modelo base (RandomForest entrenado)...")
 predictions = model.predict(X_test)
 
 # --- 3. Evaluar Rendimiento ---
@@ -34,10 +43,9 @@ print("\n--- Reporte de Clasificación ---")
 print(report)
 
 # --- 4. Guardar las Métricas ---
-reports_path = 'reports'
-os.makedirs(reports_path, exist_ok=True) # Crea la carpeta si no existe
+os.makedirs(REPORTS_PATH, exist_ok=True) # Crea la carpeta si no existe
 
-metrics_filepath = os.path.join(reports_path, 'metrics.txt')
+metrics_filepath = os.path.join(REPORTS_PATH, 'metrics.txt')
 with open(metrics_filepath, 'w') as f:
     f.write(f"Accuracy: {accuracy:.4f}\n")
     f.write("\n--- Reporte de Clasificación ---\n")
@@ -48,13 +56,14 @@ print(f"Métricas guardadas en: {metrics_filepath}")
 # ========== ADICIONES COMENZANDO AQUÍ ==========
 
 # --- 5. Cargar datos de entrenamiento y validación ---
-X_train = pd.read_csv('data/processed/X_train.csv')
-y_train = pd.read_csv('data/processed/y_train.csv').values.ravel()
+X_train = pd.read_csv(os.path.join(DATA_PATH, 'X_train.csv'))
+y_train = pd.read_csv(os.path.join(DATA_PATH, 'y_train.csv')).values.ravel()
 
-X_val = pd.read_csv('data/processed/X_val.csv')
-y_val = pd.read_csv('data/processed/y_val.csv').values.ravel()
+X_val = pd.read_csv(os.path.join(DATA_PATH, 'X_val.csv'))
+y_val = pd.read_csv(os.path.join(DATA_PATH, 'y_val.csv')).values.ravel()
 
 # --- 6. Escalamiento de variables numéricas ---
+print(" Escalando variables numéricas...")
 scaler = StandardScaler()
 numeric_cols = X_train.select_dtypes(include=np.number).columns
 
@@ -64,6 +73,7 @@ X_test[numeric_cols] = scaler.transform(X_test[numeric_cols])
 
 # --- 7. PCA para visualización 2D ---
 # Codificar la variable objetivo
+print("Generando visualización PCA...")
 le = LabelEncoder()
 y_train_encoded = le.fit_transform(y_train)
 
@@ -86,34 +96,44 @@ plt.tight_layout()
 plt.show()
 
 # --- 8. MODELO 1: Random Forest ---
-rf = RandomForestClassifier(random_state=42)
-rf.fit(X_train, y_train)
 
-# Validación
-y_val_pred_rf = rf.predict(X_val)
-print("Random Forest - Validación Accuracy:", accuracy_score(y_val, y_val_pred_rf))
+print("Entrenando y evaluando modelos adicionales...")
 
-# Prueba
-y_test_pred_rf = rf.predict(X_test)
-print("Random Forest - Test Accuracy:", accuracy_score(y_test, y_test_pred_rf))
+models = {
+    "Random Forest": RandomForestClassifier(random_state=42),
+    "SVM": SVC(random_state=42)
+}
 
-# --- 9. MODELO 2: SVM ---
-svm = SVC(random_state=42)
-svm.fit(X_train, y_train)
+for name, clf in models.items():
+    print(f"\nEntrenando modelo: {name}")
+    clf.fit(X_train, y_train)
 
-# Validación
-y_val_pred_svm = svm.predict(X_val)
-print("SVM - Validación Accuracy:", accuracy_score(y_val, y_val_pred_svm))
+    # Validación
+    y_val_pred = clf.predict(X_val)
+    val_acc = accuracy_score(y_val, y_val_pred)
 
-# Prueba
-y_test_pred_svm = svm.predict(X_test)
-print("SVM - Test Accuracy:", accuracy_score(y_test, y_test_pred_svm))
+    # Prueba
+    y_test_pred = clf.predict(X_test)
+    test_acc = accuracy_score(y_test, y_test_pred)
+
+    print(f"{name} - Validación Accuracy: {val_acc:.4f}")
+    print(f"{name} - Test Accuracy: {test_acc:.4f}")
+
+    # Guardar métricas individuales
+    metrics_path = os.path.join(REPORTS_PATH, f'metrics_{name.replace(" ", "_").lower()}.txt')
+    with open(metrics_path, 'w') as f:
+        f.write(f"{name} - Validación Accuracy: {val_acc:.4f}\n")
+        f.write(f"{name} - Test Accuracy: {test_acc:.4f}\n\n")
+        f.write("--- Reporte de Clasificación ---\n")
+        f.write(classification_report(y_test, y_test_pred))
+
 
 # --- 10. Matrices de Confusión ---
-fig, axes = plt.subplots(1, 2, figsize=(18, 6))  # 1 fila, 2 columnas
+print("Generando matrices de confusión...")
+fig, axes = plt.subplots(1, 2, figsize=(18, 6))
 
 ConfusionMatrixDisplay.from_predictions(
-    y_test, y_test_pred_rf,
+    y_test, models["Random Forest"].predict(X_test),
     display_labels=le.classes_,
     cmap='Blues',
     ax=axes[0],
@@ -122,7 +142,7 @@ ConfusionMatrixDisplay.from_predictions(
 axes[0].set_title("Matriz de Confusión - Random Forest")
 
 ConfusionMatrixDisplay.from_predictions(
-    y_test, y_test_pred_svm,
+    y_test, models["SVM"].predict(X_test),
     display_labels=le.classes_,
     cmap='Greens',
     ax=axes[1],
@@ -132,18 +152,3 @@ axes[1].set_title("Matriz de Confusión - SVM")
 
 plt.tight_layout()
 plt.show()
-
-# --- 11. Guardar métricas de ambos modelos ---
-metrics_rf_path = os.path.join(reports_path, 'metrics_rf.txt')
-with open(metrics_rf_path, 'w') as f:
-    f.write(f"Random Forest - Test Accuracy: {accuracy_score(y_test, y_test_pred_rf):.4f}\n")
-    f.write("\n--- Reporte de Clasificación ---\n")
-    f.write(classification_report(y_test, y_test_pred_rf))
-
-metrics_svm_path = os.path.join(reports_path, 'metrics_svm.txt')
-with open(metrics_svm_path, 'w') as f:
-    f.write(f"SVM - Test Accuracy: {accuracy_score(y_test, y_test_pred_svm):.4f}\n")
-    f.write("\n--- Reporte de Clasificación ---\n")
-    f.write(classification_report(y_test, y_test_pred_svm))
-
-print("✅ Métricas adicionales guardadas en carpeta 'reports'")

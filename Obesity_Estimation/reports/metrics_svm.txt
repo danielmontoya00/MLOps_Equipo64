@@ -1,3 +1,4 @@
+SVM - Validación Accuracy: 0.5603
 SVM - Test Accuracy: 0.5635
 
 --- Reporte de Clasificación ---

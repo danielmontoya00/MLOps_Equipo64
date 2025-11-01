@@ -1,0 +1,64 @@
+=== PIPELINE DE MACHINE LEARNING ===
+Inicio: 2025-10-31 23:00:24.973262
+
+
+--- Ejecutando paso: python notebooks/make_dataset.py ---
+Datos cargados desde: /Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/data/raw/obesity_estimation_final.csv
+Shape: (1535, 17)
+✅ Datos procesados y guardados en:
+/Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/data/processed
+
+--- Ejecutando paso: python models/train_model.py ---
+Ejecutando script de entrenamiento...
+📂 Leyendo datos desde: /Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/data/processed
+🔍 MLflow Run ID: 368d5a085d7f46f399027a166ff0e8bd
+Entrenando el modelo RandomForestClassifier...
+Entrenamiento completado.
+Modelo local guardado en: /Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/models/obesity_classifier_368d5a085d7f46f399027a166ff0e8bd.pkl
+Run ID guardado en: /Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/current_run_id.txt
+Script de entrenamiento finalizado y datos registrados en MLflow.
+
+[ERROR]:
+2025/10/31 23:00:26 INFO mlflow.tracking.fluent: Experiment with name 'Clasificación de Obesidad - RandomForest' does not exist. Creating a new experiment.
+2025/10/31 23:00:26 WARNING mlflow.models.model: `artifact_path` is deprecated. Please use `name` instead.
+[31m2025/10/31 23:00:28 WARNING mlflow.models.model: Model logged without a signature and input example. Please set `input_example` parameter when logging the model to auto infer the model signature.[0m
+Successfully registered model 'RandomForestObesityModel'.
+Created version '1' of model 'RandomForestObesityModel'.
+
+--- Ejecutando paso: python models/evaluate_model.py ---
+Ejecutando script de evaluación...
+Evaluando modelo base (RandomForest entrenado)...
+Accuracy del modelo: 0.9479
+
+--- Reporte de Clasificación ---
+              precision    recall  f1-score   support
+
+           0       0.93      0.97      0.95        38
+           1       0.89      0.91      0.90        43
+           2       0.93      0.98      0.95        53
+           3       0.98      1.00      0.99        43
+           4       1.00      1.00      1.00        48
+           5       0.97      0.85      0.91        41
+           6       0.95      0.90      0.93        41
+
+    accuracy                           0.95       307
+   macro avg       0.95      0.95      0.95       307
+weighted avg       0.95      0.95      0.95       307
+
+Métricas guardadas en: /Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/reports/metrics.txt
+ Escalando variables numéricas...
+Generando visualización PCA...
+Entrenando y evaluando modelos adicionales...
+
+Entrenando modelo: Random Forest
+Random Forest - Validación Accuracy: 0.9088
+Random Forest - Test Accuracy: 0.9446
+
+Entrenando modelo: SVM
+SVM - Validación Accuracy: 0.5603
+SVM - Test Accuracy: 0.5635
+Generando matrices de confusión...
+
+¡Pipeline completado exitosamente!
+
+Fin: 2025-10-31 23:00:34.918704
