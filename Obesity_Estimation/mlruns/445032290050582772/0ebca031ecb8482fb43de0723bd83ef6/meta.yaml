@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/Usuario1/Documents/GitHub/MLOps_Equipo64/Obesity_Estimation/mlruns/445032290050582772/0ebca031ecb8482fb43de0723bd83ef6/artifacts
+end_time: 1762042902966
+entry_point_name: ''
+experiment_id: '445032290050582772'
+lifecycle_stage: active
+run_id: 0ebca031ecb8482fb43de0723bd83ef6
+run_name: classy-sponge-248
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1762042893080
+status: 3
+tags: []
+user_id: Usuario1
