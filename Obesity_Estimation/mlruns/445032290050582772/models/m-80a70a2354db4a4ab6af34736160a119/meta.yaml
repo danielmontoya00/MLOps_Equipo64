@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/Usuario1/Documents/GitHub/MLOps_Equipo64/Obesity_Estimation/mlruns/445032290050582772/models/m-80a70a2354db4a4ab6af34736160a119/artifacts
+creation_timestamp: 1762042893311
+experiment_id: '445032290050582772'
+last_updated_timestamp: 1762042898663
+model_id: m-80a70a2354db4a4ab6af34736160a119
+model_type: null
+name: obesity_model
+source_run_id: 0ebca031ecb8482fb43de0723bd83ef6
+status: 2
+status_message: null

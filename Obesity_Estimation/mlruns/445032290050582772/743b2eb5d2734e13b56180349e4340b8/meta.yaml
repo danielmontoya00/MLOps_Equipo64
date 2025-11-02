@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/Usuario1/Documents/GitHub/MLOps_Equipo64/Obesity_Estimation/mlruns/445032290050582772/743b2eb5d2734e13b56180349e4340b8/artifacts
+end_time: 1762042822932
+entry_point_name: ''
+experiment_id: '445032290050582772'
+lifecycle_stage: active
+run_id: 743b2eb5d2734e13b56180349e4340b8
+run_name: peaceful-whale-197
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1762042708088
+status: 3
+tags: []
+user_id: Usuario1
