@@ -1,0 +1,22 @@
+artifact_path: file:///Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/mlruns/832253811198326808/models/m-8a6fa843ab8141a4a1beaf67be016d0d/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.7
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.2
+mlflow_version: 3.4.0
+model_id: m-8a6fa843ab8141a4a1beaf67be016d0d
+model_size_bytes: 3701996
+model_uuid: m-8a6fa843ab8141a4a1beaf67be016d0d
+prompts: null
+run_id: d05fc59d9b9d43e5841d7848bfaedaa1
+utc_time_created: '2025-11-01 03:50:59.746416'

@@ -1,0 +1,12 @@
+=== PIPELINE DE MACHINE LEARNING ===
+Inicio: 2025-10-31 22:29:01.931730
+
+
+--- Ejecutando paso: python notebooks/make_dataset.py ---
+
+[ERROR]:
+/Library/Frameworks/Python.framework/Versions/3.13/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/notebooks/make_dataset.py': [Errno 2] No such file or directory
+
+❌ ERROR: el script 'notebooks/make_dataset.py' falló.
+
+Fin: 2025-10-31 22:29:01.946469

@@ -1,0 +1,10 @@
+artifact_location: file:///Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/mlruns/832253811198326808/models/m-8a6fa843ab8141a4a1beaf67be016d0d/artifacts
+creation_timestamp: 1761969059743
+experiment_id: '832253811198326808'
+last_updated_timestamp: 1761969061367
+model_id: m-8a6fa843ab8141a4a1beaf67be016d0d
+model_type: null
+name: obesity_model
+source_run_id: d05fc59d9b9d43e5841d7848bfaedaa1
+status: 2
+status_message: null
