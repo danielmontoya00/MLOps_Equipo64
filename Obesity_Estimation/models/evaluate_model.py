@@ -16,7 +16,7 @@ from sklearn.ensemble import RandomForestClassifier
 @dataclass
 class EvaluationConfig:
     """Configuration for model evaluation."""
-    run_id_file: str = "current_run_id.txt"
+    run_id_file: str = "models/current_run_id.txt"
     data_dir: Path = Path("data/processed")
     models_dir: Path = Path("models")
     reports_dir: Path = Path("reports")

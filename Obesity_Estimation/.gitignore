@@ -193,3 +193,4 @@ cython_debug/
 !data/raw/
 !data/raw/*.dvc/mlruns
 /mlruns
+models/*.pkl
