@@ -191,4 +191,5 @@ cython_debug/
 
 # Ignorar datos cacheados por DVC
 !data/raw/
-!data/raw/*.dvc
+!data/raw/*.dvc/mlruns
+/mlruns
