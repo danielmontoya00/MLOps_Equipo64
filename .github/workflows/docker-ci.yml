@@ -36,7 +36,7 @@ jobs:
         docker run --rm ml-service:test python -m pytest tests || true
     
     - name: Validate docker-compose
-      run: docker-compose config
+      run: docker compose config
       
     - name: Security scan with Trivy
       uses: aquasecurity/trivy-action@master
