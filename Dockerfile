@@ -17,6 +17,7 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     g++ \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first (layer caching)
