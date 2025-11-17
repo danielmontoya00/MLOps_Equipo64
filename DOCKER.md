@@ -4,7 +4,7 @@
 
 ### Build the Docker image
 ```bash
-docker build -t obesity-estimation:latest .
+docker build -t ml-service:latest .
 ```
 
 ### Run with Docker Compose (Recommended)
@@ -41,7 +41,7 @@ docker-compose up -d jupyter
 docker run -it --rm \
   -v $(pwd)/Obesity_Estimation:/app/Obesity_Estimation \
   -p 8000:8000 \
-  obesity-estimation:latest
+  ml-service:latest
 ```
 
 ### Access running container
@@ -67,7 +67,7 @@ docker run -it --rm \
   -v $(pwd)/Obesity_Estimation/data:/app/Obesity_Estimation/data \
   -v $(pwd)/Obesity_Estimation/models:/app/Obesity_Estimation/models \
   -v $(pwd)/mlruns:/app/mlruns \
-  obesity-estimation:latest \
+  ml-service:latest \
   python Obesity_Estimation/models/train_model.py
 ```
 
@@ -82,8 +82,8 @@ docker run -it --rm \
 
 ### Tag and push to registry
 ```bash
-docker tag obesity-estimation:latest your-registry/obesity-estimation:v1.0.0
-docker push your-registry/obesity-estimation:v1.0.0
+docker tag ml-service:latest your-registry/ml-service:v1.0.0
+docker push your-registry/ml-service:v1.0.0
 ```
 
 ### Run in production mode
@@ -94,7 +94,7 @@ docker run -d \
   -e MLFLOW_MODEL_URI=models:/obesity_classifier/Production \
   -v /path/to/models:/app/Obesity_Estimation/models:ro \
   --restart unless-stopped \
-  obesity-estimation:latest
+  ml-service:latest
 ```
 
 ## Maintenance
@@ -105,7 +105,7 @@ docker run -d \
 docker-compose down
 
 # Remove images
-docker rmi obesity-estimation:latest
+docker rmi ml-service:latest
 
 # Remove all (containers, volumes, networks)
 docker-compose down -v
