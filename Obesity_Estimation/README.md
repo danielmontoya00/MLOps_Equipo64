@@ -107,16 +107,3 @@ Todos los comandos deben ejecutarse desde el directorio raíz del proyecto (`MLO
     ```
 
 ---
-
-## 📈 Flujo de Trabajo (Uso del Proyecto)
-
-Este es el orden correcto para ejecutar el pipeline completo.
-
-### Paso 1: Iniciar el Servidor MLflow
-
-En tu **Terminal 1**, inicia el servidor de MLflow. Este será el "backend" donde se guardarán tus modelos.
-
-```bash
-# (Estando en MLOPS/Obesity/)
-mlflow ui --host 127.0.0.1 --port 5000
-
