@@ -1,0 +1,83 @@
+services:
+  # API Service
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ml-service:latest
+    container_name: obesity_api
+    ports:
+      - "8000:8000"
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - MLFLOW_MODEL_URI=${MLFLOW_MODEL_URI:-}
+    volumes:
+      - ./Obesity_Estimation/models:/app/Obesity_Estimation/models:ro
+      - ./Obesity_Estimation/data:/app/Obesity_Estimation/data:ro
+    networks:
+      - mlops_network
+    depends_on:
+      - mlflow
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # MLflow Tracking Server
+  mlflow:
+    image: python:3.10-slim
+    container_name: mlflow_server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/mlflow/mlruns
+      - ./Obesity_Estimation/models:/mlflow/models
+    working_dir: /mlflow
+    command: >
+      sh -c "pip install --no-cache-dir mlflow boto3 psycopg2-binary &&
+             mlflow server --host 0.0.0.0 --port 5000 
+             --backend-store-uri sqlite:///mlflow.db 
+             --default-artifact-root /mlflow/mlruns"
+    networks:
+      - mlops_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Jupyter Notebook (for development)
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ml-service:latest
+    container_name: obesity_jupyter
+    ports:
+      - "8888:8888"
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    volumes:
+      - ./Obesity_Estimation:/app/Obesity_Estimation
+      - ./notebooks:/app/notebooks
+    networks:
+      - mlops_network
+    depends_on:
+      - mlflow
+    command: >
+      jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser 
+      --allow-root --NotebookApp.token='' --NotebookApp.password=''
+    restart: unless-stopped
+
+networks:
+  mlops_network:
+    driver: bridge
+
+volumes:
+  mlruns_data:
+  models_data:
