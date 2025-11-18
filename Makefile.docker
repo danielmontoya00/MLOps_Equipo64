@@ -1,0 +1,92 @@
+# Docker-specific Makefile for MLOps Project
+# This extends the main Makefile in Obesity_Estimation/
+
+.PHONY: docker-build docker-up docker-down docker-logs docker-clean docker-test docker-shell
+
+## Build Docker image
+docker-build:
+	docker build -t ml-service:latest .
+
+## Start all services with Docker Compose
+docker-up:
+	docker-compose up -d
+
+## Stop all services
+docker-down:
+	docker-compose down
+
+## View logs from all services
+docker-logs:
+	docker-compose logs -f
+
+## View logs from API service only
+docker-logs-api:
+	docker-compose logs -f api
+
+## View logs from MLflow service only
+docker-logs-mlflow:
+	docker-compose logs -f mlflow
+
+## Restart all services
+docker-restart:
+	docker-compose restart
+
+## Run tests inside container
+docker-test:
+	docker-compose exec api python -m pytest tests
+
+## Open shell in API container
+docker-shell:
+	docker-compose exec api bash
+
+## Clean up Docker resources (containers, images, volumes)
+docker-clean:
+	docker-compose down -v
+	docker rmi ml-service:latest || true
+
+## Rebuild and restart all services
+docker-rebuild:
+	docker-compose up -d --build
+
+## Show status of all services
+docker-status:
+	docker-compose ps
+
+## Run training pipeline in container
+docker-train:
+	docker-compose exec api python Obesity_Estimation/Module/run_pipeline.py
+
+## Format code inside container
+docker-format:
+	docker-compose exec api bash -c "cd Obesity_Estimation && isort Module && black Module"
+
+## Lint code inside container
+docker-lint:
+	docker-compose exec api bash -c "cd Obesity_Estimation && flake8 Module && isort --check --diff Module && black --check Module"
+
+## Create environment file from example
+docker-env:
+	cp .env.example .env
+	@echo "Created .env file. Please edit it with your configuration."
+
+## Show Docker disk usage
+docker-usage:
+	docker system df
+
+## Prune unused Docker resources
+docker-prune:
+	docker system prune -f
+
+help:
+	@echo "Docker Commands:"
+	@echo "  docker-build      - Build Docker image"
+	@echo "  docker-up         - Start all services"
+	@echo "  docker-down       - Stop all services"
+	@echo "  docker-logs       - View all logs"
+	@echo "  docker-test       - Run tests in container"
+	@echo "  docker-shell      - Open shell in container"
+	@echo "  docker-clean      - Clean up Docker resources"
+	@echo "  docker-rebuild    - Rebuild and restart"
+	@echo "  docker-train      - Run training pipeline"
+	@echo ""
+	@echo "For more commands, see DOCKER.md"

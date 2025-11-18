@@ -1,0 +1,65 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# Data & Models (usually managed separately)
+Obesity_Estimation/data/raw/*
+Obesity_Estimation/data/processed/*
+!Obesity_Estimation/data/.gitkeep
+
+# MLflow
+mlruns/
+mlflow.db
+
+# DVC
+.dvc/
+*.dvc
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Reports
+reports/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Other
+*.log
+.env
+.env.local
