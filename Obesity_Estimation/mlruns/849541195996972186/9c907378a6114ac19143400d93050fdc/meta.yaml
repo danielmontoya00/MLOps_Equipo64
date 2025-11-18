@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/mlruns/849541195996972186/9c907378a6114ac19143400d93050fdc/artifacts
+end_time: 1763423632131
+entry_point_name: ''
+experiment_id: '849541195996972186'
+lifecycle_stage: active
+run_id: 9c907378a6114ac19143400d93050fdc
+run_name: intrigued-boar-362
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763423632061
+status: 3
+tags: []
+user_id: maryg

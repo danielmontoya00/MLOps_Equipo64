@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/mlruns/849541195996972186/0d6b9f19124b4637a655c7dd8ff37852/artifacts
+end_time: 1763421586804
+entry_point_name: ''
+experiment_id: '849541195996972186'
+lifecycle_stage: active
+run_id: 0d6b9f19124b4637a655c7dd8ff37852
+run_name: polite-fawn-640
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763421586733
+status: 3
+tags: []
+user_id: maryg

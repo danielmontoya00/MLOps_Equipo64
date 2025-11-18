@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/mlruns/849541195996972186/906ff0d43e4a48b18d6ff339a17f3708/artifacts
+end_time: 1763423735831
+entry_point_name: ''
+experiment_id: '849541195996972186'
+lifecycle_stage: active
+run_id: 906ff0d43e4a48b18d6ff339a17f3708
+run_name: bald-bat-512
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763423735761
+status: 3
+tags: []
+user_id: maryg

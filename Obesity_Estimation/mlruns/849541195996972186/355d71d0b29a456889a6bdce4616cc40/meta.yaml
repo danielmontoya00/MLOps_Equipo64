@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/mlruns/849541195996972186/355d71d0b29a456889a6bdce4616cc40/artifacts
+end_time: 1763422468859
+entry_point_name: ''
+experiment_id: '849541195996972186'
+lifecycle_stage: active
+run_id: 355d71d0b29a456889a6bdce4616cc40
+run_name: auspicious-bass-817
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763422468788
+status: 3
+tags: []
+user_id: maryg

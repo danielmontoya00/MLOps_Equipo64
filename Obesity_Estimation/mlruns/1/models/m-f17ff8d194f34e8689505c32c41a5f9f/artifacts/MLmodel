@@ -1,0 +1,22 @@
+artifact_path: /Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/mlruns/1/models/m-f17ff8d194f34e8689505c32c41a5f9f/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.7
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.2
+mlflow_version: 3.4.0
+model_id: m-f17ff8d194f34e8689505c32c41a5f9f
+model_size_bytes: 2258677
+model_uuid: m-f17ff8d194f34e8689505c32c41a5f9f
+prompts: null
+run_id: d37f292a5b9949fa8ebab5d5da73c720
+utc_time_created: '2025-11-17 22:29:45.567784'

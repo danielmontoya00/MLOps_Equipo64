@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/mlruns/849541195996972186/a4fb56c168634d01bd58cfa75757e3f4/artifacts
+end_time: 1763418903629
+entry_point_name: ''
+experiment_id: '849541195996972186'
+lifecycle_stage: active
+run_id: a4fb56c168634d01bd58cfa75757e3f4
+run_name: rumbling-eel-834
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763418903559
+status: 3
+tags: []
+user_id: maryg

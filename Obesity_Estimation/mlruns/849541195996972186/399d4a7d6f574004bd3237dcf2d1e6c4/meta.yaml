@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/mlruns/849541195996972186/399d4a7d6f574004bd3237dcf2d1e6c4/artifacts
+end_time: 1763423562490
+entry_point_name: ''
+experiment_id: '849541195996972186'
+lifecycle_stage: active
+run_id: 399d4a7d6f574004bd3237dcf2d1e6c4
+run_name: merciful-bug-485
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763423562420
+status: 3
+tags: []
+user_id: maryg

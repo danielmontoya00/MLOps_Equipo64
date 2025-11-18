@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/mlruns/849541195996972186/0642a672d7034496948ad5179cf8e7c5/artifacts
+end_time: 1763419502134
+entry_point_name: ''
+experiment_id: '849541195996972186'
+lifecycle_stage: active
+run_id: 0642a672d7034496948ad5179cf8e7c5
+run_name: stylish-mouse-408
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763419502065
+status: 3
+tags: []
+user_id: maryg

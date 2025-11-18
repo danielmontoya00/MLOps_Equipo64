@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/mlruns/849541195996972186/3b4c7d3d8dd4424b886c615b4f15296f/artifacts
+end_time: 1763423370218
+entry_point_name: ''
+experiment_id: '849541195996972186'
+lifecycle_stage: active
+run_id: 3b4c7d3d8dd4424b886c615b4f15296f
+run_name: auspicious-zebra-805
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763423370148
+status: 3
+tags: []
+user_id: maryg

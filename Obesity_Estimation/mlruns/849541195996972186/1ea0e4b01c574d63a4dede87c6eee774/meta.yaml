@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/mlruns/849541195996972186/1ea0e4b01c574d63a4dede87c6eee774/artifacts
+end_time: 1763423207252
+entry_point_name: ''
+experiment_id: '849541195996972186'
+lifecycle_stage: active
+run_id: 1ea0e4b01c574d63a4dede87c6eee774
+run_name: delicate-lark-327
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763423207182
+status: 3
+tags: []
+user_id: maryg

@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/mlruns/849541195996972186/c02ea7b58e4944f987f4fb56e47e1c3f/artifacts
+end_time: 1763423676584
+entry_point_name: ''
+experiment_id: '849541195996972186'
+lifecycle_stage: active
+run_id: c02ea7b58e4944f987f4fb56e47e1c3f
+run_name: polite-sponge-538
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763423676512
+status: 3
+tags: []
+user_id: maryg

@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/mlruns/849541195996972186/a3691c5c78044f9b9957c956a961cb21/artifacts
+end_time: 1763423436347
+entry_point_name: ''
+experiment_id: '849541195996972186'
+lifecycle_stage: active
+run_id: a3691c5c78044f9b9957c956a961cb21
+run_name: amazing-auk-945
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763423436276
+status: 3
+tags: []
+user_id: maryg

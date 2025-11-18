@@ -1,0 +1,14 @@
+artifact_uri: file:///Users/maryg/Documents/TEC/Sep_Nov_2025/Aprendizaje_automatico/Semana4_29_05oct/MLOps_Equipo64/Obesity_Estimation/mlruns/849541195996972186/95e930064a084e6cacdc9ae81ebf2842/artifacts
+end_time: 1763422719194
+entry_point_name: ''
+experiment_id: '849541195996972186'
+lifecycle_stage: active
+run_id: 95e930064a084e6cacdc9ae81ebf2842
+run_name: spiffy-mule-734
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763422719125
+status: 3
+tags: []
+user_id: maryg

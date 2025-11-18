@@ -2,6 +2,8 @@
 Model evaluation script for obesity classification.
 Loads trained model, evaluates on test data, and logs metrics to MLflow.
 """
+
+import os
 import pickle
 from dataclasses import dataclass
 from pathlib import Path
@@ -12,20 +14,42 @@ import pandas as pd
 from sklearn.metrics import classification_report, accuracy_score
 from sklearn.ensemble import RandomForestClassifier
 
+# ----------------------------
+# CONFIGURACIÓN DE MLflow
+# ----------------------------
+# Nivel raíz del proyecto
+project_root = Path(__file__).resolve().parent.parent
+
+# Asegurarse de que mlruns exista dentro del proyecto
+mlruns_path = project_root / "mlruns"
+mlruns_path.mkdir(parents=True, exist_ok=True)
+
+
+mlflow_home = project_root / ".mlflow"
+mlflow_home.mkdir(parents=True, exist_ok=True)
+
+tmp_path = project_root / "tmp"
+tmp_path.mkdir(parents=True, exist_ok=True)
+
+#os.environ["TEMP"] = str(tmp_path)
+#os.environ["TMPDIR"] = str(tmp_path)
+
+mlflow.set_tracking_uri(f"file://{mlruns_path}")
+print(f"MLflow Tracking URI: {mlflow.get_tracking_uri()}")
+
 
 @dataclass
 class EvaluationConfig:
     """Configuration for model evaluation."""
+    models_dir: Path = Path("models")  # carpeta donde se guardó el modelo y run_id
     run_id_file: str = "current_run_id.txt"
     data_dir: Path = Path("data/processed")
-    models_dir: Path = Path("models")
     reports_dir: Path = Path("reports")
     x_test_file: str = "X_test.csv"
     y_test_file: str = "y_test.csv"
     metrics_file: str = "metrics.txt"
     nested_run: bool = True
     log_per_class_metrics: bool = True
-
 
 class ModelEvaluator:
     """Handles model evaluation and metrics logging."""
@@ -45,7 +69,8 @@ class ModelEvaluator:
             FileNotFoundError: If run ID file doesn't exist
             ValueError: If run ID file is empty
         """
-        run_id_path = Path(self.config.run_id_file)
+        """Load the MLflow run ID from file."""
+        run_id_path = self.config.models_dir / self.config.run_id_file
         
         if not run_id_path.exists():
             raise FileNotFoundError(
@@ -216,7 +241,12 @@ class ModelEvaluator:
         Args:
             metrics_path: Path to metrics report file
         """
-        mlflow.log_artifact(str(metrics_path))
+        """Log metrics report as MLflow artifact."""
+        artifact_folder_name = "evaluation"  # nombre relativo dentro de mlruns
+
+        # Asegurarse de usar rutas relativas dentro del proyecto
+        mlflow.log_artifact(str(metrics_path), artifact_path=artifact_folder_name)
+
         print("Reporte registrado como artefacto en MLflow.")
     
     def run_evaluation_pipeline(self) -> Dict[str, Any]:
@@ -234,8 +264,20 @@ class ModelEvaluator:
         # Load run ID
         self.run_id = self.load_run_id()
         
+        # Obtener experimento por nombre
+        experiment_name = "Clasificación de Obesidad - RF"
+        experiment = mlflow.get_experiment_by_name(experiment_name)
+    
+        if experiment is None:
+            # Si no existe, se crea
+            experiment_id = mlflow.create_experiment(experiment_name)
+            print(f"Creado experimento: {experiment_name} (ID: {experiment_id})")
+        else:
+            experiment_id = experiment.experiment_id
+            print(f"Usando experimento existente: {experiment_name} (ID: {experiment_id})")
+
         # Resume the existing MLflow run
-        with mlflow.start_run(run_id=self.run_id, nested=self.config.nested_run):
+        with mlflow.start_run(experiment_id=experiment_id, nested=self.config.nested_run):
             # Load model and test data
             self.model = self.load_model(self.run_id)
             X_test, y_test = self.load_test_data()

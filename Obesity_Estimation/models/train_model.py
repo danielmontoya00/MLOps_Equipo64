@@ -17,6 +17,13 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 
 
+# Carpeta relativa para MLflow artifacts y tracking
+mlruns_dir = Path("mlruns").resolve()
+mlruns_dir.mkdir(parents=True, exist_ok=True)
+# Backend de tracking seguro y cross-platform
+mlflow.set_tracking_uri(f"sqlite:///{Path('mlflow.db').resolve()}")
+
+
 # -------------------- CONFIG DATACLASSES --------------------
 @dataclass
 class ModelConfig:
