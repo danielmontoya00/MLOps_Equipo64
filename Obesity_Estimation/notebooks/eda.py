@@ -11,6 +11,10 @@ from src.visualization.visualize import (
     plot_correlation_matrix,
     plot_bmi_distribution
 )
+from src.utils.seed import set_seed
+
+# Set random seed for reproducibility
+set_seed(42)
 
 # Definición de columnas
 numeric_cols = ['Age', 'Height', 'Weight', 'FCVC', 'NCP', 'CH2O', 'FAF', 'TUE']

@@ -1,5 +1,5 @@
 {
-  "run_id": "891e945f7c1c4ef2931ed97bff931e15",
-  "model_uri": "runs:/891e945f7c1c4ef2931ed97bff931e15/obesity_model",
+  "run_id": "c3bed6569e0b4fbbabfdc93f23629f15",
+  "model_uri": "runs:/c3bed6569e0b4fbbabfdc93f23629f15/obesity_model",
   "registered_model_name": "RandomForestObesityModel"
 }
