@@ -9,6 +9,11 @@ on:
       - 'Obesity_Estimation/data/**'
       - 'requirements.txt'
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
 jobs:
   quick-drift-check:
     runs-on: ubuntu-latest
