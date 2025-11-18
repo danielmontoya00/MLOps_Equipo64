@@ -1,0 +1,241 @@
+name: Model Drift Monitoring
+
+on:
+  # Ejecutar automáticamente cada semana
+  schedule:
+    - cron: "0 0 * * 0" # Domingos a medianoche UTC
+
+  # Permitir ejecución manual
+  workflow_dispatch:
+    inputs:
+      drift_scenario:
+        description: "Drift scenario to test"
+        required: true
+        default: "mean_shift"
+        type: choice
+        options:
+          - mean_shift
+          - variance_shift
+          - seasonal
+          - feature_missing
+          - label_drift
+          - combined
+      drift_intensity:
+        description: "Drift intensity (0.0-1.0)"
+        required: true
+        default: "0.3"
+        type: string
+      run_all_scenarios:
+        description: "Run all drift scenarios"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  drift-monitoring:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Obesity_Estimation
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+
+      - name: 🐍 Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ../requirements.txt
+
+      - name: 📊 Check for existing model
+        id: check_model
+        run: |
+          if [ -f "models/current_run_id.txt" ]; then
+            echo "model_exists=true" >> $GITHUB_OUTPUT
+            echo "✅ Model found: $(cat models/current_run_id.txt)"
+          else
+            echo "model_exists=false" >> $GITHUB_OUTPUT
+            echo "⚠️ No model found, will train new model"
+          fi
+
+      - name: 🎯 Train model (if needed)
+        if: steps.check_model.outputs.model_exists == 'false'
+        run: |
+          python models/train_model.py
+
+      - name: 🧪 Run drift monitoring - Single scenario
+        if: ${{ !inputs.run_all_scenarios }}
+        env:
+          SCENARIO: ${{ inputs.drift_scenario || 'mean_shift' }}
+          INTENSITY: ${{ inputs.drift_intensity || '0.3' }}
+        run: |
+          echo "Running drift monitoring: $SCENARIO (intensity: $INTENSITY)"
+          python -m models.monitor_drift \
+            --scenario $SCENARIO \
+            --intensity $INTENSITY
+
+      - name: 🧪 Run drift monitoring - All scenarios
+        if: ${{ inputs.run_all_scenarios }}
+        run: |
+          echo "Running all drift scenarios..."
+
+          scenarios=("mean_shift" "variance_shift" "seasonal" "combined")
+          intensities=("0.3" "0.4" "0.5" "0.3")
+
+          for i in "${!scenarios[@]}"; do
+            scenario="${scenarios[$i]}"
+            intensity="${intensities[$i]}"
+            echo ""
+            echo "========================================="
+            echo "Scenario: $scenario (intensity: $intensity)"
+            echo "========================================="
+            python -m models.monitor_drift \
+              --scenario "$scenario" \
+              --intensity "$intensity" || echo "⚠️ Scenario $scenario failed but continuing..."
+          done
+
+      - name: 📊 Generate monitoring summary
+        if: always()
+        run: |
+          echo "# Data Drift Monitoring Report" > monitoring_summary.md
+          echo "" >> monitoring_summary.md
+          echo "**Run Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> monitoring_summary.md
+          echo "" >> monitoring_summary.md
+
+          if [ -d "reports/monitoring" ]; then
+            echo "## Generated Reports" >> monitoring_summary.md
+            echo "" >> monitoring_summary.md
+            
+            # Count artifacts
+            n_reports=$(find reports/monitoring -name "*.txt" -o -name "*.json" | wc -l)
+            n_plots=$(find reports/monitoring -name "*.png" | wc -l)
+            
+            echo "- Text Reports: $n_reports" >> monitoring_summary.md
+            echo "- Visualizations: $n_plots" >> monitoring_summary.md
+            echo "" >> monitoring_summary.md
+            
+            # List alert files
+            if ls reports/monitoring/alert.json 2>/dev/null; then
+              echo "## Alert Status" >> monitoring_summary.md
+              echo '```json' >> monitoring_summary.md
+              cat reports/monitoring/alert.json >> monitoring_summary.md
+              echo '```' >> monitoring_summary.md
+            fi
+            
+            # List monitoring summaries
+            echo "" >> monitoring_summary.md
+            echo "## Monitoring Summaries" >> monitoring_summary.md
+            for summary in reports/monitoring/monitoring_summary_*.json; do
+              if [ -f "$summary" ]; then
+                echo "" >> monitoring_summary.md
+                echo "### $(basename $summary .json)" >> monitoring_summary.md
+                echo '```json' >> monitoring_summary.md
+                cat "$summary" >> monitoring_summary.md
+                echo '```' >> monitoring_summary.md
+              fi
+            done
+          fi
+
+          cat monitoring_summary.md
+
+      - name: 📦 Upload monitoring reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: drift-monitoring-reports-${{ github.run_number }}
+          path: |
+            Obesity_Estimation/reports/monitoring/
+            Obesity_Estimation/data/monitoring/
+            Obesity_Estimation/monitoring_summary.md
+          retention-days: 30
+
+      - name: 📦 Upload visualizations
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: drift-visualizations-${{ github.run_number }}
+          path: Obesity_Estimation/reports/monitoring/*.png
+          retention-days: 30
+
+      - name: 🚨 Check for critical drift
+        id: drift_check
+        if: always()
+        run: |
+          # Check if any alert.json has CRITICAL or HIGH level
+          if [ -f "reports/monitoring/alert.json" ]; then
+            alert_level=$(python -c "import json; data=json.load(open('reports/monitoring/alert.json')); print(data.get('alert_level', 'NONE'))")
+            echo "alert_level=$alert_level" >> $GITHUB_OUTPUT
+            
+            if [ "$alert_level" = "CRITICAL" ] || [ "$alert_level" = "HIGH" ]; then
+              echo "critical_drift=true" >> $GITHUB_OUTPUT
+              echo "🚨 CRITICAL/HIGH drift detected: $alert_level"
+            else
+              echo "critical_drift=false" >> $GITHUB_OUTPUT
+              echo "✅ Drift level acceptable: $alert_level"
+            fi
+          else
+            echo "critical_drift=false" >> $GITHUB_OUTPUT
+            echo "⚠️ No alert file found"
+          fi
+
+      - name: 💬 Comment on PR (if applicable)
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+
+            let comment = '## 📊 Data Drift Monitoring Report\n\n';
+
+            if (fs.existsSync('Obesity_Estimation/monitoring_summary.md')) {
+              const summary = fs.readFileSync('Obesity_Estimation/monitoring_summary.md', 'utf8');
+              comment += summary;
+            }
+
+            comment += '\n\n---\n';
+            comment += `🔗 [View detailed reports](${context.payload.pull_request.html_url}/checks)\n`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: ⚠️ Fail if critical drift detected
+        if: steps.drift_check.outputs.critical_drift == 'true'
+        run: |
+          echo "::error::Critical or high drift detected! Review monitoring reports."
+          echo "::warning::Alert Level: ${{ steps.drift_check.outputs.alert_level }}"
+          exit 1
+
+  notify-on-failure:
+    runs-on: ubuntu-latest
+    needs: drift-monitoring
+    if: failure()
+
+    steps:
+      - name: 📧 Send notification (placeholder)
+        run: |
+          echo "🚨 Drift monitoring failed or critical drift detected"
+          echo "This is where you would send notifications via:"
+          echo "  - Email"
+          echo "  - Slack"
+          echo "  - Teams"
+          echo "  - PagerDuty"
+          echo ""
+          echo "See monitoring artifacts for details"

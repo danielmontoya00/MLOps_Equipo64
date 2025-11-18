@@ -1,0 +1,138 @@
+name: PR - Drift Detection
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - "Obesity_Estimation/models/**"
+      - "Obesity_Estimation/src/**"
+      - "Obesity_Estimation/data/**"
+      - "requirements.txt"
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  quick-drift-check:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Obesity_Estimation
+
+    steps:
+      - name: 📥 Checkout PR branch
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ../requirements.txt
+
+      - name: 🧪 Test monitoring system
+        run: |
+          bash test_monitoring.sh
+
+      - name: 🎯 Quick drift simulation
+        run: |
+          echo "Running quick drift check with low intensity..."
+          python -m models.monitor_drift \
+            --scenario mean_shift \
+            --intensity 0.2
+
+      - name: 📊 Extract key metrics
+        id: metrics
+        run: |
+          if [ -f "reports/monitoring/alert.json" ]; then
+            alert_level=$(python -c "import json; print(json.load(open('reports/monitoring/alert.json'))['alert_level'])")
+            echo "alert_level=$alert_level" >> $GITHUB_OUTPUT
+            
+            drift_detected=$(python -c "import json; print(json.load(open('reports/monitoring/alert.json'))['drift_detected'])")
+            echo "drift_detected=$drift_detected" >> $GITHUB_OUTPUT
+          else
+            echo "alert_level=UNKNOWN" >> $GITHUB_OUTPUT
+            echo "drift_detected=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: 📝 Generate PR comment
+        uses: actions/github-script@v6
+        if: always()
+        with:
+          script: |
+            const fs = require('fs');
+
+            const alertLevel = '${{ steps.metrics.outputs.alert_level }}';
+            const driftDetected = '${{ steps.metrics.outputs.drift_detected }}';
+
+            let emoji = '✅';
+            let status = 'No significant drift detected';
+
+            if (alertLevel === 'CRITICAL') {
+              emoji = '🔴';
+              status = 'CRITICAL drift detected - Immediate action required!';
+            } else if (alertLevel === 'HIGH') {
+              emoji = '🟠';
+              status = 'HIGH drift detected - Review recommended';
+            } else if (alertLevel === 'MEDIUM') {
+              emoji = '🟡';
+              status = 'MEDIUM drift detected - Monitor closely';
+            } else if (alertLevel === 'LOW') {
+              emoji = '🟢';
+              status = 'LOW drift detected - Within acceptable range';
+            }
+
+            let comment = `## ${emoji} Data Drift Check\n\n`;
+            comment += `**Status:** ${status}\n`;
+            comment += `**Alert Level:** ${alertLevel}\n`;
+            comment += `**Drift Detected:** ${driftDetected}\n\n`;
+
+            // Add recommendations if drift detected
+            if (alertLevel === 'CRITICAL' || alertLevel === 'HIGH') {
+              comment += '### ⚠️ Recommendations\n\n';
+              comment += '- Review the changes in this PR\n';
+              comment += '- Check if data preprocessing changed\n';
+              comment += '- Validate feature engineering pipeline\n';
+              comment += '- Consider retraining the model\n\n';
+            }
+
+            // Add monitoring summary if exists
+            if (fs.existsSync('Obesity_Estimation/reports/monitoring/drift_report.txt')) {
+              const driftReport = fs.readFileSync('Obesity_Estimation/reports/monitoring/drift_report.txt', 'utf8');
+              comment += '<details>\n<summary>📊 Detailed Drift Report</summary>\n\n';
+              comment += '```\n' + driftReport + '\n```\n';
+              comment += '</details>\n\n';
+            }
+
+            comment += '\n---\n';
+            comment += `📁 Workflow run: [#${context.runNumber}](${context.payload.repository.html_url}/actions/runs/${context.runId})\n`;
+
+            // Post comment
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: 📦 Upload drift reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pr-drift-check-${{ github.event.pull_request.number }}
+          path: |
+            Obesity_Estimation/reports/monitoring/
+          retention-days: 14
+
+      - name: ❌ Fail on critical drift
+        if: steps.metrics.outputs.alert_level == 'CRITICAL'
+        run: |
+          echo "::error::Critical drift detected in PR changes"
+          exit 1

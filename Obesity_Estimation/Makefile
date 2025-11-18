@@ -46,6 +46,42 @@ format:
 .PHONY: test
 test:
 	python -m pytest tests
+
+## Test monitoring system setup
+.PHONY: test-monitoring
+test-monitoring:
+	@echo "Testing Data Drift Monitoring System..."
+	@bash test_monitoring.sh
+
+## Run data drift monitoring (default: mean_shift)
+.PHONY: monitor-drift
+monitor-drift:
+	@echo "Running drift monitoring with scenario: $(SCENARIO)"
+	$(PYTHON_INTERPRETER) -m models.monitor_drift --scenario $(or $(SCENARIO),mean_shift) --intensity $(or $(INTENSITY),0.3)
+
+## Run all drift scenarios
+.PHONY: monitor-all-scenarios
+monitor-all-scenarios:
+	@echo "Running all drift scenarios..."
+	$(PYTHON_INTERPRETER) -m models.monitor_drift --scenario mean_shift --intensity 0.3
+	$(PYTHON_INTERPRETER) -m models.monitor_drift --scenario variance_shift --intensity 0.4
+	$(PYTHON_INTERPRETER) -m models.monitor_drift --scenario seasonal --intensity 0.5
+	$(PYTHON_INTERPRETER) -m models.monitor_drift --scenario combined --intensity 0.3
+
+## Generate drift simulation only
+.PHONY: simulate-drift
+simulate-drift:
+	$(PYTHON_INTERPRETER) -c "from src.monitoring.drift_simulator import main; main()"
+
+## Detect drift only (requires existing drifted data)
+.PHONY: detect-drift
+detect-drift:
+	$(PYTHON_INTERPRETER) -c "from src.monitoring.drift_detector import main; main()"
+
+## Monitor performance only
+.PHONY: monitor-performance
+monitor-performance:
+	$(PYTHON_INTERPRETER) -c "from src.monitoring.performance_monitor import main; main()"
 ## Download Data from storage system
 .PHONY: sync_data_down
 sync_data_down:

@@ -11,6 +11,13 @@ from typing import List, Optional, Dict, Any
 from enum import Enum
 import logging
 
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from src.utils.seed import set_seed
+
+# Set random seed for reproducibility
+set_seed(42)
+
 
 class PipelineStep(Enum):
     """Enumeration of pipeline steps."""

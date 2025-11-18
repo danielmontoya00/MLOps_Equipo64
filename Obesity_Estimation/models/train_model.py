@@ -5,6 +5,7 @@ so downstream services (e.g., FastAPI) can load the exact model version.
 """
 
 import os
+import sys
 import json
 import pickle
 from dataclasses import dataclass
@@ -15,6 +16,13 @@ import mlflow
 import mlflow.sklearn
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
+
+# Add parent directory to path for imports
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from src.utils.seed import set_seed
+
+# Set random seed for reproducibility
+set_seed(42)
 
 
 # -------------------- CONFIG DATACLASSES --------------------
@@ -158,6 +166,15 @@ class ModelTrainer:
     def run_training_pipeline(self) -> str:
         """Execute the complete training pipeline with MLflow tracking."""
         print("Ejecutando script de entrenamiento...")
+
+        # Set MLflow tracking URI to ensure correct path on Linux
+        tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
+        if not tracking_uri:
+            # Use local mlruns directory by default
+            base_dir = Path(__file__).parent.parent
+            tracking_uri = f"file://{base_dir.absolute()}/mlruns"
+        mlflow.set_tracking_uri(tracking_uri)
+        print(f"MLflow tracking URI: {mlflow.get_tracking_uri()}")
 
         # Set up MLflow experiment
         mlflow.set_experiment(self.experiment_name)

@@ -1,32 +1,35 @@
 # Core ML & Data Science
-dvc
-mlflow
-pandas
-numpy
-matplotlib
-seaborn
-scikit-learn
+dvc==3.55.2
+mlflow==2.16.2
+pandas==2.2.3
+numpy==1.26.4
+matplotlib==3.9.2
+seaborn==0.13.2
+scikit-learn==1.5.2
+scipy==1.14.1
 
 # Jupyter
-jupyter
-notebook
-ipykernel
+jupyter==1.1.1
+notebook==7.2.2
+ipykernel==6.29.5
 
 # API & Web
-fastapi
-uvicorn[standard]
-pydantic
+fastapi==0.115.4
+uvicorn[standard]==0.32.0
+pydantic==2.9.2
 
 # Utilities
-python-dotenv
+python-dotenv==1.0.1
 
 # Testing
-pytest
+pytest==8.3.3
 
 # Code Quality
-flake8
-black
-isort
+flake8==7.1.1
+black==24.10.0
+isort==5.13.2
 
 # Build Tools
-flit_core>=3.2,<4
+flit_core==3.9.0
+
+

@@ -1,6 +1,14 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
+from src.utils.seed import set_seed
+
+# Set random seed for reproducibility
+set_seed(42)
 
 # Cargar datos crudos
 df = pd.read_csv('data/raw/obesity_estimation_final.csv')

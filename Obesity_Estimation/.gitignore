@@ -192,3 +192,53 @@ cython_debug/
 # Ignorar datos cacheados por DVC
 !data/raw/
 !data/raw/*.dvc
+
+# ML Model artifacts
+*.pkl
+*.pickle
+*.joblib
+*.h5
+*.hdf5
+*.pb
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.tflite
+*.mlmodel
+*.mar
+
+# Model directories
+models/
+saved_models/
+checkpoints/
+weights/
+
+# MLflow artifacts
+mlruns/
+mlartifacts/
+
+# Training outputs
+outputs/
+logs/
+tensorboard/
+wandb/
+
+# Experiment tracking
+.wandb/
+.neptune/
+.comet.config
+
+# Drift detection artifacts
+reports/monitoring/*.png
+reports/monitoring/*.txt
+reports/monitoring/*.json
+reports/monitoring/*.html
+drift_reports/
+drift_results/
+*drift_report*
+*drift_heatmap*
+alert.json
+monitoring_summary*.json
+performance_comparison.txt
