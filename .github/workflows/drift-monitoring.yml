@@ -2,8 +2,8 @@ name: Model Drift Monitoring
 
 on:
   # Ejecutar automáticamente cada semana
-  schedule:
-    - cron: "0 0 * * 0" # Domingos a medianoche UTC
+#  schedule:
+    #- cron: "0 0 * * 0" # Domingos a medianoche UTC
 
   # Permitir ejecución manual
   workflow_dispatch:
